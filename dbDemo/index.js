@@ -10,18 +10,11 @@ app.get('/', (req, res) => {
 
 app.post('/initData', (req, res) => {
     dbManager.createTables("Users");
-    dbManager.addColumn("Users", [{name: "name", type: "TEXT"}, {name: "email", type: "TEXT"}]);
-    /* Insert following data
-    Zayaan Camacho, zayaan@demo.com 
-    Eliza Mccullough, eliza@demo.com 
-    Eloise Wade, eloise@demo.com 
-    Ptolemy Cervantes, ptolemy@demo.com  
-    */
+    dbManager.addColumn("Users", [{name: "name", type: "TEXT"}, {name: "email", type: "TEXT"}, {name: "password", type: "TEXT"}]);
 
-    dbManager.insert("Users", {name: "Zayaan Camacho ", email: "zayaan@demo.com"});
-    dbManager.insert("Users", {name: "Eliza Mccullough", email: "eliza@demo.com"});
-    dbManager.insert("Users", {name: "Eloise Wade", email: "eloise@demo.com"});
-    dbManager.insert("Users", {name: "Ptolemy Cervantes", email: "ptolemy@demo.com"});
+    dbManager.insert("Users", {name: "Zayaan Camacho ", email: "zayaan@demo.com", password: "$2y$10$bbODacdveMTbkqjoRn88senVw7Frb/nTqmImbDxA4.jozZDnJCSQq"});
+    dbManager.insert("Users", {name: "Eliza Mccullough", email: "eliza@demo.com", password: "123456"});
+
     res.send('Database initialized');
 })
 
