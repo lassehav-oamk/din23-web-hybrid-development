@@ -1,14 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-interface HelloWorldProps {
-    greeting: string
-}
 
-const HelloWorld = (props : HelloWorldProps) => {
+const HelloWorld = () => {
   return (
     <View style={styles.container}>
-      <Text>{ props.greeting }</Text>
+      <Text>Hello World </Text>
     </View>
   )
 }
