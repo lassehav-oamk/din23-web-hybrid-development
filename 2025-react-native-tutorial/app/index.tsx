@@ -9,6 +9,7 @@ import TextInputExample from "./TextInputExample/TextInputExample";
 
 import { Link } from 'expo-router';
 import PressableExample from "./PressableExample/PressableExample";
+import TodoApp from "./TodoAppExample/TodoApp";
 
 
 export default function Index() {
@@ -26,10 +27,11 @@ export default function Index() {
       {/* <FlexDirectionAndJustify /> */ }
       {/*<IconExample />*/}
       {/*<ImageExample />*/}
-      <TextInputExample />
+      {/* <TextInputExample />
       <TextInputExample />
 
-      <PressableExample />
+      <PressableExample /> */}
+      <TodoApp />
 
       {/* <Link href="/Greeter">Greeter</Link>
       <Link href="/HelloWorld">HelloWorld</Link> */}
