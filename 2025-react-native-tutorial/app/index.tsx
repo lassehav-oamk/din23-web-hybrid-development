@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import Timer from "./TimerExample";
 import React, { useEffect, useState } from "react";
 import Dimensions from "./layoutExample/1Dimensions";
@@ -6,6 +6,9 @@ import FlexDirectionAndJustify from "./layoutExample/2FlexDirectionAndJustify";
 import ImageExample from "./ImageExample/ImageExample";
 import IconExample from "./IconExample/IconExample";
 import TextInputExample from "./TextInputExample/TextInputExample";
+
+import { Link } from 'expo-router';
+import PressableExample from "./PressableExample/PressableExample";
 
 
 export default function Index() {
@@ -23,7 +26,13 @@ export default function Index() {
       {/* <FlexDirectionAndJustify /> */ }
       {/*<IconExample />*/}
       {/*<ImageExample />*/}
-      {/*<TextInputExample />*/}
+      <TextInputExample />
+      <TextInputExample />
+
+      <PressableExample />
+
+      {/* <Link href="/Greeter">Greeter</Link>
+      <Link href="/HelloWorld">HelloWorld</Link> */}
 
 
     </View>
