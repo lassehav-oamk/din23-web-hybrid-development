@@ -25,7 +25,7 @@ export default function Index() {
         backgroundColor: "white"        
       }}
     >
-      <Text>Hello World</Text>
+      <Text>Hello World, this is index.tsx from /app</Text>
       {/*<Timer />*/}
       {/* <FlexDirectionAndJustify /> */ }
       {/*<IconExample />*/}
@@ -39,20 +39,21 @@ export default function Index() {
       {/* <Text>Links to other views</Text>
       <Link href="/Greeter">Greeter</Link>
       <Link href="/HelloWorld">HelloWorld</Link>
+      <Link href="/TodoAppExample/TodoApp">Go to TodoApp</Link>
 
       <View style={{ marginTop: 20 }}>
         <Pressable onPress={() => {
-          router.navigate('/TodoAppExample/TodoApp');
+          router.navigate('/TodoAppExample/TodoApp');        
         }}>
           <Text>Navigate to TodoApp from code</Text>
         </Pressable>
-      </View> */}
+      </View>  */}
 
       {/* <NavParamExample /> */}
 
       <Link href="/StackNavExample">
         <Text>Navigate to StackNavExample</Text>
-      </Link>
+      </Link> 
 
     </View>
   );
