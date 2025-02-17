@@ -40,15 +40,17 @@ export default function HomeScreen() {
             renderItem={({ item }) => (      
               <Link asChild href={ '/advertDetail/' + item.id }>
                 <Pressable>        
-                  <AdPreview 
-                    id={item.id}
-                    title={item.title}
-                    description={item.description}
-                    price={item.price}
-                    contactPhone={item.contactPhone}
-                    contactEmail={item.contactEmail}
-                    photos={item.photos}
-                  />
+                  <View style={{ width: screenWidth / 2 }}>
+                    <AdPreview 
+                      id={item.id}
+                      title={item.title}
+                      description={item.description}
+                      price={item.price}
+                      contactPhone={item.contactPhone}
+                      contactEmail={item.contactEmail}
+                      photos={item.photos}
+                    />
+                  </View>
                 </Pressable>     
               </Link>
             )}
