@@ -1,7 +1,8 @@
-import { Image, StyleSheet, Platform, View, SafeAreaView, Text } from 'react-native';
+import { Image, StyleSheet, Platform, View, SafeAreaView, Text, FlatList, Pressable } from 'react-native';
 import { useEffect, useState } from 'react';
 import AdPreview from '@/components/AdPreview';
 import IAdvert from '@/types/iAdvert';
+import { Link } from 'expo-router';
 
 export default function HomeScreen() {
 
@@ -31,20 +32,28 @@ export default function HomeScreen() {
         loading ? (
           <Text>Loading...</Text>
         ) : (
-          <View style={styles.adContainer}>
-            {ads.map((ad) => (
-              <AdPreview 
-                key={ad.id}
-                id={ad.id}
-                title={ad.title}
-                description={ad.description}
-                price={ad.price}
-                contactPhone={ad.contactPhone}
-                contactEmail={ad.contactEmail}
-                photos={ad.photos}
-              />
-            ))}
-          </View>
+          <FlatList contentContainerStyle={styles.adContainer}
+            data={ads}
+            keyExtractor={(ad) => ad.id.toString()}
+            numColumns={2}
+            renderItem={({ item }) => (
+              <Link href={ '/detailView/' + item.id} asChild>
+                <Pressable>
+                  <AdPreview 
+                    key={item.id}
+                    id={item.id}
+                    title={item.title}
+                    description={item.description}
+                    price={item.price}
+                    contactPhone={item.contactPhone}
+                    contactEmail={item.contactEmail}
+                    photos={item.photos}
+                  />
+                </Pressable>
+              </Link>
+            )}
+          />
+          
         ) 
       }
     </SafeAreaView>

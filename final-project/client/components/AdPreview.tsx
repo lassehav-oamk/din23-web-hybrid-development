@@ -16,10 +16,12 @@ export default function AdPreview({ title, description, price, contactPhone, con
 
 const styles = StyleSheet.create({
     container: {
-        padding: 16,
+        padding: 2,
         backgroundColor: '#fff',
         borderRadius: 8,
         marginBottom: 16,
+        flex: 1,
+        marginLeft: 8
         
     },
     image: {
