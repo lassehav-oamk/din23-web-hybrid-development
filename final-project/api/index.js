@@ -14,7 +14,20 @@ app.use(express.json());
 
 // In-memory storage for demonstration purposes
 const users = [{ username: 'test', password: 'password' }];
-const ads = [];
+const ads = [
+    {        
+        id: 1,
+        title: 'Test Ad',
+        description: 'This is a test ad',
+        price: 100,
+        contactPhone: '123456789',
+        contactEmail: 'test@email.com',
+        photos: ['/files/exampleProduct.png']        
+    }
+];
+
+// Serve images from uploads folder
+app.use('/files', express.static('uploads'));
 
 // Passport Basic Strategy for login
 passport.use(new BasicStrategy((username, password, done) => {
@@ -41,7 +54,10 @@ app.post('/users', (req, res) => {
         return res.status(400).send({ error: 'Missing required fields' });
     }
     const userId = users.length + 1;
+
+    // Notice that no password hashing is done here for simplicity
     users.push({ userId, name, username, email, phone });
+
     res.status(201).json({ userId: userId.toString() });
 });
 
