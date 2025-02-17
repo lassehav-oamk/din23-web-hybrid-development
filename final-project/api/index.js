@@ -23,6 +23,51 @@ const ads = [
         contactPhone: '123456789',
         contactEmail: 'test@email.com',
         photos: ['/files/exampleProduct.png']        
+    },
+    {        
+        id: 2,
+        title: 'Test Ad2',
+        description: 'This is a test ad',
+        price: 100,
+        contactPhone: '123456789',
+        contactEmail: 'test@email.com',
+        photos: ['/files/exampleProduct.png']        
+    },
+    {        
+        id: 3,
+        title: 'Test Ad3',
+        description: 'This is a test ad',
+        price: 100,
+        contactPhone: '123456789',
+        contactEmail: 'test@email.com',
+        photos: ['/files/exampleProduct.png']        
+    },
+    {        
+        id: 4,
+        title: 'Test Ad4',
+        description: 'This is a test ad',
+        price: 100,
+        contactPhone: '123456789',
+        contactEmail: 'test@email.com',
+        photos: ['/files/exampleProduct.png']        
+    },
+    {        
+        id: 5,
+        title: 'Test Ad5',
+        description: 'This is a test ad',
+        price: 100,
+        contactPhone: '123456789',
+        contactEmail: 'test@email.com',
+        photos: ['/files/exampleProduct.png']        
+    },
+    {        
+        id: 6,
+        title: 'Test Ad6',
+        description: 'This is a test ad',
+        price: 100,
+        contactPhone: '123456789',
+        contactEmail: 'test@email.com',
+        photos: ['/files/exampleProduct.png']        
     }
 ];
 

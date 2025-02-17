@@ -6,21 +6,28 @@ import IAdvert from '@/types/iAdvert';
 
 export default function AdPreview({ title, description, price, contactPhone, contactEmail, photos }: IAdvert) {
   return (
-    <View style={styles.container}>
-        <Image style={styles.image} source={{ uri: photos[0] }} />
-        <Text>{title}</Text>
-        <Text style={ styles.price }>{price}</Text>
+    <View style={styles.outerContainer}>
+        <View style={styles.innerContainer}>
+            <Image style={styles.image} source={{ uri: photos[0] }} />
+            <Text>{title}</Text>
+            <Text style={ styles.price }>{price}</Text>
+        </View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        padding: 16,
+    outerContainer: {
+        paddingLeft: 5,
+        paddingRight: 5,
+        flex: 1,
+    },
+    innerContainer: {
+        padding: 8,
         backgroundColor: '#fff',
         borderRadius: 8,
         marginBottom: 16,
-        
+        flex: 1
     },
     image: {
         width: '100%',
