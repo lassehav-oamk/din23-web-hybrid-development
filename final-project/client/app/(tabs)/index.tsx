@@ -3,25 +3,31 @@ import { useEffect, useState } from 'react';
 import AdPreview from '@/components/AdPreview';
 import IAdvert from '@/types/iAdvert';
 import { Link } from 'expo-router';
+import useStateStore from '@/stateStore/store';
 
 export default function HomeScreen() {
 
-  const [ ads, setAds ] = useState<IAdvert[]>([]);
   const [ loading, setLoading ] = useState(true);
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+
+  const adverts : IAdvert[] = useStateStore((state) => state.loadedAdverts);
+  const addAdverts = useStateStore((state) => state.addAdverts);
+
 
   useEffect(() => {
     fetch(apiUrl + '/adverts')
       .then((response) => response.json())
       .then((data) => {
-        setAds(data.ads.map((ad: IAdvert) => {
+
+        addAdverts(data.ads.map((ad: IAdvert) => {
           return {
             ...ad,
             photos: ad.photos.map((photoUrl: string) => {
               return apiUrl + photoUrl;
             })
           }
-        }));
+        }))
+
         setLoading(false);
       });
   }, []);
@@ -32,9 +38,8 @@ export default function HomeScreen() {
         loading ? (
           <Text>Loading...</Text>
         ) : (
-          <FlatList contentContainerStyle={styles.adContainer}
-            data={ads}
-            keyExtractor={(ad) => ad.id.toString()}
+          <FlatList
+            data={adverts}
             numColumns={2}
             renderItem={({ item }) => (
               <Link href={ '/detailView/' + item.id} asChild>
