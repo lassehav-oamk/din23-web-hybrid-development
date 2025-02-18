@@ -1,6 +1,7 @@
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import { useState, useRef } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View, SafeAreaView, Pressable, Image } from 'react-native';
+import { Link } from 'expo-router'
 
 export default function createNew() {
   const [facing, setFacing] = useState<CameraType>('back');
@@ -42,7 +43,12 @@ export default function createNew() {
           </Pressable>
           <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
             <Text style={styles.text}>Flip Camera</Text>
-          </TouchableOpacity>          
+          </TouchableOpacity>
+          <Link href="/createNew/writeDetailsAndSubmit" asChild>
+            <Pressable>
+              <View style={{ borderRadius: 15, width: 60, height: 60, backgroundColor: "red"}}></View>
+            </Pressable>
+          </Link>      
         </View>
       </CameraView>
     );
@@ -58,16 +64,16 @@ export default function createNew() {
           <Image source={ { uri: photoUri } }
             contentFit="contain"
             style={{ flex: 1, maxWidth: '100%', aspectRatio: 1 }}
-          />
+          />          
         </View>
       </SafeAreaView>
     );
   }
 
   return (
-    <View style={styles.container}>
-      { photoUri ? renderPhoto() : renderCamera() }
-    </View>
+     <View style={styles.container}>
+       { photoUri ? renderPhoto() : renderCamera() }
+     </View>
   );
 }
 
