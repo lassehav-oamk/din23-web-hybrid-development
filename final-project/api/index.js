@@ -118,7 +118,8 @@ app.get('/adverts', (req, res) => {
 });
 
 // Post new ad (JWT protected)
-app.post('/adverts', passport.authenticate('jwt', { session: false }), (req, res) => {
+//app.post('/adverts', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.post('/adverts', (req, res) => {    
     const { ad } = req.body;
     if (!ad || !ad.title || !ad.description || !ad.price || !ad.contactPhone || !ad.contactEmail) {
         return res.status(400).send({ error: 'Missing required fields' });
