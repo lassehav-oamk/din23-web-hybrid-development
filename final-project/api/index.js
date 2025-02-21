@@ -1,3 +1,4 @@
+const fs = require('fs');
 const express = require('express');
 const multer = require('multer');
 const jwt = require('jsonwebtoken');
@@ -137,9 +138,18 @@ app.get('/adverts/:id', (req, res) => {
 });
 
 // Add photos to advert (JWT protected)
-app.put('/adverts/:id/photos', passport.authenticate('jwt', { session: false }), upload.array('files', 4), (req, res) => {
+//app.put('/adverts/:id/photos', passport.authenticate('jwt', { session: false }), upload.array('files', 4), (req, res) => {
+app.put('/adverts/:id/photos', upload.array('files', 4), (req, res) => {
     const ad = ads.find(a => a.id === parseInt(req.params.id));
     if (!ad) return res.sendStatus(404);
+    // rename the files with random names, but with .jpg extension
+    req.files.forEach(file => {
+        const ext = file.originalname.split('.').pop();
+        const newFilename = `${Math.random().toString(36).substring(7)}.${ext}`;
+        fs.renameSync(file.path, `uploads/${newFilename}`);
+        file.path = `/files/${newFilename}`;
+    });
+
     ad.photos = req.files.map(file => file.path);
     res.sendStatus(201);
 });
