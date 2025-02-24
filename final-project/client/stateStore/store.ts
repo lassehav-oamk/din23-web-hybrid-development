@@ -1,6 +1,8 @@
 import IAdvert from '@/types/iAdvert'
 import { create } from 'zustand'
 
+import * as SecureStore from 'expo-secure-store';
+
 const useStateStore = create((set, get) => ({
   loadedAdverts: [] as IAdvert[],
   jwt: null as string | null,
@@ -8,7 +10,10 @@ const useStateStore = create((set, get) => ({
   findAdvertById: (id) => {
     return get().loadedAdverts.find((ad : IAdvert) => ad.id == id) 
   },
-  setJwt: (jwt : string) => set({jwt})
+  setJwt: async (jwt : string) => {
+    await SecureStore.setItemAsync('jwt', jwt);
+    set({jwt})
+  }
 }));
 
 export default useStateStore;

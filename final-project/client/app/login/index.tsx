@@ -1,9 +1,8 @@
-import { View, Text, StyleSheet, Pressable, TextInput } from 'react-native'
+import { View, Text, StyleSheet, Pressable, TextInput, Alert } from 'react-native'
 import React, { useEffect } from 'react'
 import useStateStore from '@/stateStore/store';
 import { useRouter, useNavigation } from "expo-router";
-
-
+import Button from '@/components/Button';
 
 export default function index() {
 
@@ -14,19 +13,43 @@ export default function index() {
     const setJwt = useStateStore((state) => state.setJwt)
     const router = useRouter();
     const navigation = useNavigation();
+    const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
     useEffect(() => {
         navigation.setOptions({ headerShown: false }); // Hide header when login screen is mounted
     }, []);
 
-    function login() {
-        console.log('login');
-        setJwt('TEST');
-        router.replace('/(tabs)/createNew')
+    async function login() {
+        console.log('login')
+        try {            
+            const authHeader = "Basic " + btoa(username + ":" + password);
+
+            const loginResponse = await fetch(apiUrl + '/login', {
+                method: 'GET',
+                headers: {
+                    "Authorization": authHeader
+                }});
+            
+            console.log(loginResponse.ok)
+            if(loginResponse.ok) {
+                const responseBody = await loginResponse.json();
+                setJwt(responseBody.jwt)
+                router.replace('/(tabs)/createNew')
+            }
+            else {
+                Alert.alert('Login failed');
+            }
+        } catch (error) {
+            console.log(error);
+            console.log('tst')
+        }
+        
+        //router.replace('/(tabs)/createNew')
+
     }
 
     function register() {
-        console.log('register');
+        router.push('/login/signup')
     }
 
     function continueWithoutLogin() {
@@ -49,18 +72,14 @@ export default function index() {
                     placeholder="Password"
                     onChangeText={(text) => setPassword(text)}
                 />
-                <Pressable style={styles.button} onPress={login}>
-                    <Text style={styles.buttonText}>Login</Text>
-                </Pressable>
+                
+                <Button type="primary" onPress={login} value="Login"/>
 
                 <Text>Don't have an account?</Text>
-                <Pressable style={styles.button} onPress={register}>
-                    <Text style={styles.buttonText}>Register</Text>
-                </Pressable>
+                <Button type="secondary" onPress={register} value="Register"/>
 
-                <Pressable style={styles.secondaryButton} onPress={continueWithoutLogin}>
-                    <Text>Continue browsing without registration</Text>
-                </Pressable>
+                <Button type="tertiary" onPress={continueWithoutLogin} value="Continue browsing without registration"/>
+
                 
             </View>
         </View>
@@ -92,18 +111,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginBottom: 40,
     },
-    button: {
-        padding: 10,
-        margin: 20,
-        backgroundColor: 'green',
-    },
-    buttonText: {
-        color: 'white',
-    },
-    secondaryButton: {
-        padding: 10,
-        margin: 20,
-        borderColor: 'black',
-        borderWidth: 1
-    }
+
 });

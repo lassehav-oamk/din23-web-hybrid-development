@@ -95,14 +95,15 @@ app.use(passport.initialize());
 
 // Register new user
 app.post('/users', (req, res) => {
-    const { name, username, email, phone } = req.body;
+    const { name, username, email, phone, password } = req.body;
+    console.log(req.body)
     if (!name || !username || !email || !phone) {
         return res.status(400).send({ error: 'Missing required fields' });
     }
     const userId = users.length + 1;
 
     // Notice that no password hashing is done here for simplicity
-    users.push({ userId, name, username, email, phone });
+    users.push({ userId, name, username, email, phone, password});
 
     res.status(201).json({ userId: userId.toString() });
 });
@@ -112,6 +113,10 @@ app.get('/login', passport.authenticate('basic', { session: false }), (req, res)
     const token = jwt.sign({ user: req.user.username }, 'secretkey', { expiresIn: '1h' });
     res.json({ jwt: token });
 });
+
+app.get('/users', (req, res) => {
+    res.json(users);
+})
 
 // Get all ads
 app.get('/adverts', (req, res) => {
