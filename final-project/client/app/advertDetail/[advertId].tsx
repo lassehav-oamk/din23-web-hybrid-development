@@ -1,16 +1,13 @@
 import { View, Text } from 'react-native'
 import { useEffect } from 'react'
 import { useLocalSearchParams, useNavigation  } from 'expo-router';
-import useStateStore, { IState } from '@/stateStore/store';
+import useStateStore from '@/stateStore/store';
 import IAdvert from '@/types/iAdvert';
-
-
 
 export default function advertId() {
     const navigation = useNavigation();
 
-    const adverts : IAdvert[] = useStateStore((state: IState) => state.loadedAdverts);
-    const findAdvertById = useStateStore((state: IState) => state.findAdvertById);
+    const findAdvertById = useStateStore((state) => state.findAdvertById)
 
     // Enable header in stack nav for this component
     useEffect(() => {
@@ -21,15 +18,18 @@ export default function advertId() {
     }, [navigation]);
 
     const local = useLocalSearchParams();
-    const advertId = parseInt(local.advertId);
-    const advert : IAdvert | undefined = findAdvertById(advertId);
-
+    const advertId = local.advertId;
+    const advertDataOfThisId : IAdvert = findAdvertById(advertId);
 
     return (
         <View>
         <Text>This is now the componen which represents the detail view</Text>
         <Text>For advert with id: {advertId}</Text>
-        <Text>Advert title: { advert.title }</Text>
+        <Text>Title of the current product: {advertDataOfThisId.title}</Text>
+        <Text>Seller phone number: { advertDataOfThisId.contactPhone }</Text>
+        <Text>Seller email: { advertDataOfThisId.contactEmail }</Text>
+        <Text>Price: { advertDataOfThisId.price }</Text>
+        <Text>Description: { advertDataOfThisId.description}</Text>
         </View>
     )
 }

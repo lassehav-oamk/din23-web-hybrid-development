@@ -1,21 +1,13 @@
-import { create } from 'zustand';
-import IAdvert from '@/types/iAdvert';
+import IAdvert from '@/types/iAdvert'
+import { create } from 'zustand'
 
-export interface IState {
-    loadedAdverts: IAdvert[],
-    addAdverts: (adverts: IAdvert[]) => void,
-    findAdvertById: (id: number) => IAdvert | undefined,
-    //removeAllBears: () => void,
-}
-
-const useStateStore = create<IState>((set, get) => ({
-    loadedAdverts: [] as IAdvert[],
-    addAdverts: (adverts: IAdvert[]) => set({ loadedAdverts: adverts }),
-    findAdvertById: (id: number) => {
-        return get().loadedAdverts.find((advert : IAdvert) => advert.id === id);
-    },
-
-    //removeAllBears: () => set({ bears: 0 }),
+const useStateStore = create((set, get) => ({
+  loadedAdverts: [] as IAdvert[],
+  jwt: null as string | null,
+  setLoadedAdverts: (adverts: IAdvert[]) => set({ loadedAdverts: adverts}),
+  findAdvertById: (id) => {
+    return get().loadedAdverts.find((ad : IAdvert) => ad.id == id) 
+  }
 }));
 
 export default useStateStore;

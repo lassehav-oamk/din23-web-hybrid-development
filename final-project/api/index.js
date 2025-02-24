@@ -1,3 +1,4 @@
+const fs = require('fs');
 const express = require('express');
 const multer = require('multer');
 const jwt = require('jsonwebtoken');
@@ -44,7 +45,7 @@ const ads = [
     },
     {        
         id: 4,
-        title: 'Test Ad',
+        title: 'Test Ad4',
         description: 'This is a test ad',
         price: 100,
         contactPhone: '123456789',
@@ -53,7 +54,7 @@ const ads = [
     },
     {        
         id: 5,
-        title: 'Test Ad',
+        title: 'Test Ad5',
         description: 'This is a test ad',
         price: 100,
         contactPhone: '123456789',
@@ -62,25 +63,7 @@ const ads = [
     },
     {        
         id: 6,
-        title: 'Test Ad',
-        description: 'This is a test ad',
-        price: 100,
-        contactPhone: '123456789',
-        contactEmail: 'test@email.com',
-        photos: ['/files/exampleProduct.png']        
-    },
-    {        
-        id: 7,
-        title: 'Test Ad',
-        description: 'This is a test ad',
-        price: 100,
-        contactPhone: '123456789',
-        contactEmail: 'test@email.com',
-        photos: ['/files/exampleProduct.png']        
-    },
-    {        
-        id: 8,
-        title: 'Test Ad',
+        title: 'Test Ad6',
         description: 'This is a test ad',
         price: 100,
         contactPhone: '123456789',
@@ -136,7 +119,8 @@ app.get('/adverts', (req, res) => {
 });
 
 // Post new ad (JWT protected)
-app.post('/adverts', passport.authenticate('jwt', { session: false }), (req, res) => {
+//app.post('/adverts', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.post('/adverts', (req, res) => {    
     const { ad } = req.body;
     if (!ad || !ad.title || !ad.description || !ad.price || !ad.contactPhone || !ad.contactEmail) {
         return res.status(400).send({ error: 'Missing required fields' });
@@ -154,9 +138,18 @@ app.get('/adverts/:id', (req, res) => {
 });
 
 // Add photos to advert (JWT protected)
-app.put('/adverts/:id/photos', passport.authenticate('jwt', { session: false }), upload.array('files', 4), (req, res) => {
+//app.put('/adverts/:id/photos', passport.authenticate('jwt', { session: false }), upload.array('files', 4), (req, res) => {
+app.put('/adverts/:id/photos', upload.array('files', 4), (req, res) => {
     const ad = ads.find(a => a.id === parseInt(req.params.id));
     if (!ad) return res.sendStatus(404);
+    // rename the files with random names, but with .jpg extension
+    req.files.forEach(file => {
+        const ext = file.originalname.split('.').pop();
+        const newFilename = `${Math.random().toString(36).substring(7)}.${ext}`;
+        fs.renameSync(file.path, `uploads/${newFilename}`);
+        file.path = `/files/${newFilename}`;
+    });
+
     ad.photos = req.files.map(file => file.path);
     res.sendStatus(201);
 });
