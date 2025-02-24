@@ -7,7 +7,8 @@ const useStateStore = create((set, get) => ({
   setLoadedAdverts: (adverts: IAdvert[]) => set({ loadedAdverts: adverts}),
   findAdvertById: (id) => {
     return get().loadedAdverts.find((ad : IAdvert) => ad.id == id) 
-  }
+  },
+  setJwt: (jwt : string) => set({jwt})
 }));
 
 export default useStateStore;
