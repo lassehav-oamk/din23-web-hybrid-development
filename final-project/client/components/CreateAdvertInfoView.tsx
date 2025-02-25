@@ -1,6 +1,8 @@
-import { View, Text, Image, Pressable, StyleSheet, TextInput } from 'react-native'
+import { View, Text, Image, Pressable, StyleSheet, TextInput, Alert } from 'react-native'
 import React from 'react'
 import IAdvert from '@/types/iAdvert'
+import useStateStore from '@/stateStore/store';
+import { router } from 'expo-router';
 
 interface ICreateAdvertInfoViewProps {
     photoUri: string | null,
@@ -12,6 +14,7 @@ export default function CreateAdvertInfoView({ photoUri, resetUri }: ICreateAdve
     const [title, setTitle] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [price, setPrice] = React.useState('');
+    const jwt = useStateStore((state) => state.jwt)
 
     async function submitAdvertDataToApi() {
         console.log('submitAdvertDataToApi');
@@ -28,17 +31,22 @@ export default function CreateAdvertInfoView({ photoUri, resetUri }: ICreateAdve
             ad: advertData,
         }
 
-        // submit this test advert data to api
         const apiUrl = process.env.EXPO_PUBLIC_API_URL;
         try {
             const response = await fetch(apiUrl + '/adverts', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + jwt
                 },
                 body: JSON.stringify(postData),
             });
             console.log(response);
+            if(response.ok == false) {
+                Alert.alert('Advert post failed')
+                resetUri();                
+                return;
+            }
             // next, we read the advert id from the response and upload the photo to the advert
             // using the put request and http multipart form data
             const responseData = await response.json();
@@ -56,9 +64,18 @@ export default function CreateAdvertInfoView({ photoUri, resetUri }: ICreateAdve
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'multipart/form-data',
+                    'Authorization': 'Bearer ' + jwt
                 },
                 body: formData,
             });
+
+            if(putResponse.ok) {
+                Alert.alert('Advert created');
+                router.replace('/(tabs)');
+            } else {
+                Alert.alert('Photo upload failed');
+                resetUri();
+            }
 
         } catch (error) {
             console.error('Error:', error);
