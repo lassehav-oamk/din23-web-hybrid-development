@@ -14,7 +14,7 @@ const upload = multer({ dest: 'uploads/' });
 app.use(express.json());
 
 // In-memory storage for demonstration purposes
-const users = [{ username: 'test', password: 'password' }];
+const users = [{ username: 'test', password: 'pwd', email: 'test@email', phone: '000111222' }];
 const ads = [
     {        
         id: 1,

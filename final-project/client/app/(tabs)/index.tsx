@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Platform, View, SafeAreaView, Text, FlatList, Dimensions, Pressable } from 'react-native';
+import { Image, StyleSheet, Platform, View, SafeAreaView, Text, FlatList, Dimensions, Pressable, RefreshControl } from 'react-native';
 import { useEffect, useState } from 'react';
 import AdPreview from '@/components/AdPreview';
 import IAdvert from '@/types/iAdvert';
@@ -10,10 +10,10 @@ export default function HomeScreen() {
   const loadedAdverts : IAdvert[] = useStateStore((state) => state.loadedAdverts);
   const setLoadedAdverts = useStateStore((state) => state.setLoadedAdverts)
 
-  const [ loading, setLoading ] = useState(true);
+  const [ loading, setLoading ] = useState(true);  
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
-  useEffect(() => {
+  function updateAdverts() {
     fetch(apiUrl + '/adverts')
       .then((response) => response.json())
       .then((data) => {
@@ -27,7 +27,17 @@ export default function HomeScreen() {
         }));
         setLoading(false);
       });
+  }
+
+  useEffect(() => {
+    updateAdverts();
   }, []);
+
+  const onRefresh = () => {
+    setLoading(true);
+    updateAdverts();
+  }
+
 
   const screenWidth = Dimensions.get('window').width;
 
@@ -58,6 +68,9 @@ export default function HomeScreen() {
               </Link>
             )}
             keyExtractor={item => item.id.toString()}
+            refreshControl={
+              <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+            }
           />
         ) 
       }
