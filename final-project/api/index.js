@@ -88,7 +88,9 @@ const opts = {
     secretOrKey: 'secretkey'
 };
 passport.use(new JwtStrategy(opts, (jwt_payload, done) => {
-    return done(null, jwt_payload);
+    const user = users.find(u => u.userId === jwt_payload.userId);
+    if (!user) return done(null, false);
+    return done(null, user);
 }));
 
 app.use(passport.initialize());
@@ -110,7 +112,7 @@ app.post('/users', (req, res) => {
 
 // Login endpoint (Basic auth with Passport)
 app.get('/login', passport.authenticate('basic', { session: false }), (req, res) => {
-    const token = jwt.sign({ user: req.user.username }, 'secretkey', { expiresIn: '1h' });
+    const token = jwt.sign({ user: req.user.username, userId: req.user.userId }, 'secretkey', { expiresIn: '1h' });
     res.json({ jwt: token });
 });
 
@@ -124,14 +126,14 @@ app.get('/adverts', (req, res) => {
 });
 
 // Post new ad (JWT protected)
-//app.post('/adverts', passport.authenticate('jwt', { session: false }), (req, res) => {
-app.post('/adverts', (req, res) => {    
+app.post('/adverts', passport.authenticate('jwt', { session: false }), (req, res) => {
+//app.post('/adverts', (req, res) => {    
     const { ad } = req.body;
-    if (!ad || !ad.title || !ad.description || !ad.price || !ad.contactPhone || !ad.contactEmail) {
+    if (!ad || !ad.title || !ad.description || !ad.price) {
         return res.status(400).send({ error: 'Missing required fields' });
     }
     const createdAdId = ads.length + 1;
-    ads.push({ id: createdAdId, ...ad });
+    ads.push({ id: createdAdId, ...ad, contactPhone: req.user.phone, contactEmail: req.user.email });
     res.status(201).json({ createdAdId: createdAdId.toString() });
 });
 
@@ -143,8 +145,8 @@ app.get('/adverts/:id', (req, res) => {
 });
 
 // Add photos to advert (JWT protected)
-//app.put('/adverts/:id/photos', passport.authenticate('jwt', { session: false }), upload.array('files', 4), (req, res) => {
-app.put('/adverts/:id/photos', upload.array('files', 4), (req, res) => {
+app.put('/adverts/:id/photos', passport.authenticate('jwt', { session: false }), upload.array('files', 4), (req, res) => {
+//app.put('/adverts/:id/photos', upload.array('files', 4), (req, res) => {
     const ad = ads.find(a => a.id === parseInt(req.params.id));
     if (!ad) return res.sendStatus(404);
     // rename the files with random names, but with .jpg extension
