@@ -11,9 +11,11 @@ const useStateStore = create((set, get) => ({
     return get().loadedAdverts.find((ad : IAdvert) => ad.id == id) 
   },
   setJwt: async (jwt : string) => {
-    await SecureStore.setItemAsync('jwt', jwt);
+    if(jwt != null) {
+      await SecureStore.setItemAsync('jwt', jwt);
+    }  
     set({jwt})
-  }
+  }  
 }));
 
 export default useStateStore;
