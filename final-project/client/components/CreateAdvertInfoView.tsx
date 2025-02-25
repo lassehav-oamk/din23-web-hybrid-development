@@ -1,6 +1,8 @@
-import { View, Text, Image, Pressable, StyleSheet, TextInput } from 'react-native'
+import { View, Text, Image, Pressable, StyleSheet, TextInput, Alert } from 'react-native'
 import React from 'react'
 import IAdvert from '@/types/iAdvert'
+import useStateStore from '@/stateStore/store';
+import { useRouter } from 'expo-router'
 
 interface ICreateAdvertInfoViewProps {
     photoUri: string | null,
@@ -12,15 +14,14 @@ export default function CreateAdvertInfoView({ photoUri, resetUri }: ICreateAdve
     const [title, setTitle] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [price, setPrice] = React.useState('');
-
+    const jwt : string = useStateStore((state) => state.jwt);
+    const router = useRouter();
     async function submitAdvertDataToApi() {
         console.log('submitAdvertDataToApi');
         const advertData : IAdvert = {
             title: title,
             description: description,
             price: parseFloat(price),
-            contactPhone: '123456789',
-            contactEmail: 'test@email.com',
             photos:[]
         };
 
@@ -28,13 +29,14 @@ export default function CreateAdvertInfoView({ photoUri, resetUri }: ICreateAdve
             ad: advertData,
         }
 
-        // submit this test advert data to api
+        
         const apiUrl = process.env.EXPO_PUBLIC_API_URL;
         try {
             const response = await fetch(apiUrl + '/adverts', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + jwt
                 },
                 body: JSON.stringify(postData),
             });
@@ -56,9 +58,15 @@ export default function CreateAdvertInfoView({ photoUri, resetUri }: ICreateAdve
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'multipart/form-data',
+                    'Authorization': 'Bearer ' + jwt
                 },
                 body: formData,
             });
+
+            if(putResponse.ok) {
+                Alert.alert('Advert submitted');
+                router.replace('/(tabs)')
+            }
 
         } catch (error) {
             console.error('Error:', error);

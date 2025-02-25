@@ -5,24 +5,53 @@ import { useRouter, useNavigation } from "expo-router";
 import Button from '@/components/Button';
 
 export default function index() {
-
+    const router = useRouter();
+    const navigation = useNavigation();
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
-
+    const setJwt = useStateStore((state) => state.setJwt)
 
     const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerShown: false
+        });
+    }, []);
 
 
     async function login() {
         console.log('login')
+        // send username and password in http request to api
+        // if successful, we get JWT in response
+        // save the JWT into our global store
+        // and then we are logged 
+        const usernamePasswordBase64Encoded = btoa(username + ':' + password)
+        const loginResponse = await fetch(apiUrl + '/login', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Basic ' + usernamePasswordBase64Encoded
+            }
+        })
+
+        if(loginResponse.ok) {
+            const responseData = await loginResponse.json();
+            console.log(responseData);
+            setJwt(responseData.jwt);
+            router.replace('/(tabs)/createNew')
+        }
+        else {
+            Alert.alert('Incorrect username or password');
+        }
+
     }
 
     function register() {
-        //router.push('/login/signup')
+        router.push('/login/signup')
     }
 
     function continueWithoutLogin() {
-        //router.replace('/(tabs)')
+        router.replace('/(tabs)')
     }
 
     return (

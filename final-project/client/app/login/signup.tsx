@@ -14,7 +14,27 @@ export default function RegisterScreen() {
     const apiUrl = process.env.EXPO_PUBLIC_API_URL;
     
     const handleRegister = async () => {
-      Alert.alert("Register");          
+      //Alert.alert("Register");         
+      
+      const userData = {
+        name: fullName, 
+        username, 
+        email, 
+        phone, 
+        password
+      }
+      
+      const signupResponse = await fetch(apiUrl + '/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+      })
+
+      if(signupResponse.ok) {
+        Alert.alert('Signup completed')
+      }
     };
 
   

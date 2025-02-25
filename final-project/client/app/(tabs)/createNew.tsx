@@ -3,6 +3,7 @@ import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import { useState, useRef } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View, Pressable, Image, ScrollView } from 'react-native';
 import CreateAdvertInfoView from '@/components/CreateAdvertInfoView';
+import ProtectedScreen from '@/components/ProtectedScreen';
 
 export default function App() {
   const [facing, setFacing] = useState<CameraType>('back');
@@ -60,9 +61,11 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-      { uriToTakenPhoto ? renderTakenPhoto() : renderCameraView()}
-    </View>
+    <ProtectedScreen>
+      <View style={styles.container}>
+        { uriToTakenPhoto ? renderTakenPhoto() : renderCameraView()}
+      </View>
+    </ProtectedScreen>
   );
 }
 
